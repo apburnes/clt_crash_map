@@ -1,0 +1,24 @@
+{
+  "name": "clt_crashes",
+  "version": "0.0.1",
+  "description": "Heat map of Charlotte car crashes via the GeoRSS feed",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test/"
+  },
+  "repository": "",
+  "keywords": [
+    "mapping",
+    "open-data",
+    "charlotte",
+    "gis",
+    "accidents",
+    "car",
+    "crashes"
+  ],
+  "author": "Andrew Burnes",
+  "license": "BSD",
+  "dependencies": {
+    "request": "2.33.0"
+  }
+}
