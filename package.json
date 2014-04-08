@@ -19,6 +19,8 @@
   "author": "Andrew Burnes",
   "license": "BSD",
   "dependencies": {
+    "express": "~3.5.1",
+    "jade": "*",
     "request": "2.33.0"
   }
 }
