@@ -1,11 +1,15 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
-  br
-  h3 Total Records: #{events.length}
-  each val in events
-    h4= val.message
-    p= val.latitude
-    p= val.longitude
+  .row
+    #map.col-md-8.map
+      h1 Map Here
+    .col-md-4.list
+      h1= title
+      p Welcome to #{title}
+      br
+      h3 Total Records: #{events.length}
+      each val in events
+        h4= val.message
+        p= val.latitude
+        p= val.longitude
