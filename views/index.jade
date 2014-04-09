@@ -2,14 +2,25 @@ extends layout
 
 block content
   .row
-    #map.col-md-8.map
-      h1 Map Here
-    .col-md-4.list
+    .col-sm-8
+      h1 CLT Map
+      #map
+
+    .col-sm-4.list
       h1= title
       p Welcome to #{title}
-      br
-      h3 Total Records: #{events.length}
+      hr
+
+      ul.list-inline
+        li <h3>Crash Count:</h3>
+        li <span class="lead">#{events.length}</span>
+      hr
       each val in events
-        h4= val.message
-        p= val.latitude
-        p= val.longitude
+        .row.event
+          blockquote.msg= val.message
+
+          ul.list-inline.pull-right
+            li <strong>Lat:</strong>
+            li= val.latitude
+            li <strong>Long:</strong>
+            li= val.longitude
