@@ -16,7 +16,7 @@ function toGeoJSON(json, done) {
   var geojson = new collection();
 
   for (var i = 0; i < features.length; i++) {
-    var coords = [features[i].latitude, features[i].longitude];
+    var coords = [features[i].longitude, features[i].latitude];
     var message = features[i].message;
 
     function geo(point) {
@@ -25,6 +25,7 @@ function toGeoJSON(json, done) {
     }
 
     function aFeature(point, message) {
+      this.type = "Feature";
       this.geometry = new geo(point);
       this.properties = {
         msg: message
@@ -40,22 +41,20 @@ function toGeoJSON(json, done) {
 
 exports.index = function(req, res) {
   request(options, function(err, response, body) {
-  if(err) return console.log(err);
-  var json = JSON.parse(body, null, 2);
+    if(err) return console.log(err);
+    var json = JSON.parse(body, null, 2);
 
-  toGeoJSON(json, function(err, data) {
-    if (err) {
-      console.log(err);
-    }
-    else {
-      console.log(data);
-    }
+    toGeoJSON(json, function(err, data) {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        res.render('index', {
+          title: "Charlotte Crash Map",
+          events: json.events,
+          geojson: data
+        });
+      }
+    });
   });
-
-  res.render('index', {
-    title: "Charlotte Crash Map",
-    events: json.events
-  });
-
-});
 }
