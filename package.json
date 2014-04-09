@@ -2,11 +2,15 @@
   "name": "clt_crashes",
   "version": "0.0.1",
   "description": "Heat map of Charlotte car crashes via the GeoRSS feed",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "mocha test/"
   },
-  "repository": "",
+  "engines": {
+    "node": "0.10.x",
+    "npm": "1.4.x"
+  },
+  "repository": "git@github.com:apburnes/clt_crash_map.git",
   "keywords": [
     "mapping",
     "open-data",
