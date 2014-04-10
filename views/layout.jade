@@ -23,7 +23,7 @@ html
     }).addTo(map);
 
     function onEachFeature(feature, layer) {
-      var popup = feature.properties.msg
+      var popup = '<blockquote class="msg">' + feature.properties.msg + '</blockquote>'
 
       layer.bindPopup(popup);
     }

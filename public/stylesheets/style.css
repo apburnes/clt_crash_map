@@ -28,3 +28,12 @@ blockquote.msg {
   color: #444444;
   border-left: 5px solid #b6405f;
 }
+
+.leaflet-popup-content-wrapper {
+  border-radius: 0 !important;
+  padding: 0 !important;
+}
+
+.leaflet-popup-content {
+  margin: 0 !important;
+}
