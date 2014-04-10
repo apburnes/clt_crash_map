@@ -8,6 +8,7 @@ html
     link(rel='stylesheet', href='/javascripts/leaflet/leaflet.css')
     link(rel='shortcut icon', href='/images/clt_crash.png', type='image/x-icon')
     script(src='/javascripts/leaflet/leaflet.js')
+    script(src='/javascripts/leaflet/leaflet-heat.js')
   body
     .container
       block content
@@ -28,16 +29,36 @@ html
       layer.bindPopup(popup);
     }
 
-    L.geoJson(!{JSON.stringify(geojson, null, 2)}, {
-                    onEachFeature: onEachFeature,
-                    pointToLayer: function(feature, latlng) {
-                      return L.circleMarker(latlng, {
-                        "radius": 5,
-                        "fillColor": "#b6405f",
-                        "color": "#000",
-                        "weight": 1,
-                        "opacity": 1,
-                        "fillOpacity": 0.5
-                      });
-                    }
-                  }).addTo(map);
+    function addData(data) {
+      var features = []
+      data.features.forEach(function(i) {
+          features.push([i.geometry.coordinates[1], i.geometry.coordinates[0]])
+      })
+
+      var options = {
+        radius: 30,
+        blur: 1,
+        gradient: {
+          0.2: 'blue',
+          0.3: 'red'
+        }
+      }
+      var heat = L.heatLayer(features, options).addTo(map);
+
+      var gj = L.geoJson(data, {
+                      onEachFeature: onEachFeature,
+                      pointToLayer: function(feature, latlng) {
+                        return L.circleMarker(latlng, {
+                          "radius": 5,
+                          "fillColor": "#b6405f",
+                          "color": "#000",
+                          "weight": 1,
+                          "opacity": 1,
+                          "fillOpacity": 0.5
+                        });
+                      }
+                    });
+      gj.addTo(map);
+    }
+
+    addData(!{JSON.stringify(geojson, null, 2)});
