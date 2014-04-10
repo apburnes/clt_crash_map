@@ -4,25 +4,25 @@ block content
   .row
     .col-sm-8
       h1 CLT Map
-      p Click points to read crash messsages
+      p.lead Click points to read crash messsages
       hr
       #map
 
-    .col-sm-4.list
-      h1= title
-      p Welcome to #{title}
-      hr
+    .col-sm-4
+      .row
+        .col-12
+          h1= title
+          p.lead CLT Crash Count: <strong>#{events.length}</strong>
+          hr
 
-      ul.list-inline
-        li <h3>Crash Count:</h3>
-        li <span class="lead">#{events.length}</span>
-      hr
-      each val in events
-        .row.event
-          blockquote.msg= val.message
+      .row
+        .col-12.list
+          each val in events
+            //.row.event
+            blockquote.msg= val.message
 
-          ul.list-inline.pull-right
-            li <strong>Lat:</strong>
-            li= val.latitude
-            li <strong>Long:</strong>
-            li= val.longitude
+              //ul.list-inline.pull-right
+                //li <strong>Lat:</strong>
+                //li= val.latitude
+                //li <strong>Long:</strong>
+                //li= val.longitude

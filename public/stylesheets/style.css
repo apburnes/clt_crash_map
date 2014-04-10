@@ -4,12 +4,12 @@
     display: block;
 }
 
-/*.list {
-  position: fixed;
-  float: right;
-  height: 100%;
+.list {
+/*  position: fixed;*/
+/*  float: right;*/
+  height: 500px;
   overflow: auto;
-}*/
+}
 
 .event {
 /*  background-color: #bada55;*/
