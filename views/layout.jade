@@ -59,6 +59,8 @@ html
                       }
                     });
       gj.addTo(map);
+
+      var crashes = L.control.layers().addTo(map);
     }
 
     addData(!{JSON.stringify(geojson, null, 2)});
