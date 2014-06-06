@@ -19,47 +19,29 @@ function getGeoRss(url, done) {
     if (err) return log(err);
     parseString(body, function(err, result) {
       if (err) return log(err);
-      var events = result.rss.channel[0].item;
+      var events = result.rss.channel[0].item || [];
       done(null, events);
     });
   });
 }
 
 // Iterate and save events to the Feature Document in the database
-function saveGeoData(events, done) {
+function iterGeoData(events, done) {
 
   events.forEach(function(item, ix, arr) {
     var len = arr.length - 1;
-    var coords = item['georss:point'][0].split(' ');
-
-    var feature = {
-      type: 'Feature',
-      properties: [{
-        title: item.title[0],
-        eventNum: item.event_no[0],
-        dateAdded: item.datetime_add[0],
-        division: item.division[0],
-        address: item.address[0],
-        eventType: item.event_type[0],
-        eventDesc: item.event_desc[0]
-      }],
-      geometry: [{
-        type: 'Point',
-        coordinates: [
-          coords[1],
-          coords[0]
-        ]
-      }]
-    };
-
-    if (ix < len) {
-      console.log(ix + " < "+ len)
-      console.log("Item: " + JSON.stringify(feature, null, 2));
+    if (len === 0) {
+      done();
+    }
+    else if (ix < len) {
+      saveGeoData(item, function() {
+        log('Saved')
+      });
     }
     else if (ix === len) {
-      console.log(ix + " === "+ len)
-      console.log("Last: " + JSON.stringify(feature, null, 2));
-      done();
+      saveGeoData(item, function() {
+        done();
+      });
     }
     else {
       log('Lost Feature');
@@ -68,6 +50,42 @@ function saveGeoData(events, done) {
   });
 }
 
+function saveGeoData(item, done) {
+  var coords = item['georss:point'][0].split(' ');
+
+  var feature = new Feature({
+    type: 'Feature',
+    properties: [{
+      title: item.title[0],
+      eventNum: item.event_no[0],
+      dateAdded: item.datetime_add[0],
+      division: item.division[0],
+      address: item.address[0],
+      eventType: item.event_type[0],
+      eventDesc: item.event_desc[0]
+    }],
+    geometry: [{
+      type: 'Point',
+      coordinates: [
+        coords[1],
+        coords[0]
+      ]
+    }]
+  });
+
+  feature.save(function(err) {
+    if (err) return done(err);
+    done();
+  });
+}
+
+// Find Features
+function findData(done) {
+  Feature.find(function(err, features) {
+    var count = features.length;
+    done(count);
+  });
+};
 
 // Log messages
 function log(msg) {
@@ -75,10 +93,14 @@ function log(msg) {
 }
 
 // Get and save the converted data
-getGeoRss(url, function(err, events) {
-  saveGeoData(events, function() {
-    mongoose.disconnect(function() {
-      log();
-    })
-  });
-});
+
+setInterval(function() {
+  getGeoRss(url, function(err, events) {
+    if (err) return log(err);
+    iterGeoData(events, function() {
+      findData(function(count) {
+        log('Total incidents recorded: ' + count);
+      })
+    });
+  })
+}, 600000);
